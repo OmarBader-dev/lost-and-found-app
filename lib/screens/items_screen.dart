@@ -10,18 +10,18 @@ class ItemsScreen extends StatefulWidget {
 }
 
 class _ItemsScreenState extends State<ItemsScreen> {
-  late Future<List<Item>> itemsFuture;
+  late Future<List<Item>> _itemsFuture;
   String filter = 'All';
 
   @override
   void initState() {
     super.initState();
-    itemsFuture = ApiService.getItems();
+    _itemsFuture = ApiService.getItems();
   }
 
   void refreshItems() {
     setState(() {
-      itemsFuture = ApiService.getItems();
+      _itemsFuture = ApiService.getItems();
     });
   }
 
@@ -29,7 +29,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lost & Found'),
+        title: const Text('Lost & Found'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -37,7 +37,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
                 filter = value;
               });
             },
-            itemBuilder: (context) => [
+            itemBuilder: (context) => const [
               PopupMenuItem(value: 'All', child: Text('All')),
               PopupMenuItem(value: 'Lost', child: Text('Lost')),
               PopupMenuItem(value: 'Found', child: Text('Found')),
@@ -46,22 +46,19 @@ class _ItemsScreenState extends State<ItemsScreen> {
         ],
       ),
       body: FutureBuilder<List<Item>>(
-        future: itemsFuture,
+        future: _itemsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
-
           if (snapshot.hasError) {
-            return Center(child: Text('Error loading items'));
+            return const Center(child: Text('Error loading items'));
           }
-
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No items found'));
+            return const Center(child: Text('No items found'));
           }
 
-          final items = snapshot.data!;
-          final filteredItems = items.where((item) {
+          final filteredItems = snapshot.data!.where((item) {
             if (filter == 'All') return true;
             return item.status == filter;
           }).toList();
@@ -70,21 +67,65 @@ class _ItemsScreenState extends State<ItemsScreen> {
             itemCount: filteredItems.length,
             itemBuilder: (context, index) {
               final item = filteredItems[index];
-              return Card(
-                child: ListTile(
-                  title: Text(item.title),
-                  subtitle:
-                  Text('${item.location} • ${item.status}'),
-                  onTap: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ItemDetailsScreen(item: item),
-                      ),
-                    );
+              return InkWell(
+                onTap: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ItemDetailsScreen(item: item),
+                    ),
+                  );
+                  if (result == true) {
                     refreshItems();
-                  },
+                  }
+                },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 6),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[200],
+                        child: Image.network(
+                          'http://lostandfouund.atwebpages.com/lostandfound_api/get_image.php?id=${item.id}',
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, __, ___) =>
+                          const Icon(Icons.image_not_supported),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(item.location),
+                              const SizedBox(height: 4),
+                              Text(
+                                item.status,
+                                style: TextStyle(
+                                  color: item.status == 'Lost'
+                                      ? Colors.red
+                                      : Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -92,15 +133,15 @@ class _ItemsScreenState extends State<ItemsScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () async {
-          await Navigator.push(
+          final result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => AddItemScreen(),
-            ),
+            MaterialPageRoute(builder: (_) => AddItemScreen()),
           );
-          refreshItems();
+          if (result == true) {
+            refreshItems();
+          }
         },
       ),
     );
