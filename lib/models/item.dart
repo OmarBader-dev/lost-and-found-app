@@ -1,4 +1,5 @@
 class Item {
+  final int id;
   final String title;
   final String description;
   final String location;
@@ -7,6 +8,7 @@ class Item {
   final String phone;
 
   Item({
+    required this.id,
     required this.title,
     required this.description,
     required this.location,
@@ -17,6 +19,7 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
+      id: int.parse(json['id']),
       title: json['title'],
       description: json['description'],
       location: json['location'],

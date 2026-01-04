@@ -22,6 +22,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
       "key": "password"
     });
 
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Item added successfully")),
+    );
+    _titleController.clear();
+    _descriptionController.clear();
+    _locationController.clear();
+
     Navigator.pop(context);
   }
 

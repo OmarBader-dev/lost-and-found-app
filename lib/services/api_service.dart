@@ -33,5 +33,19 @@ class ApiService {
     }
   }
 
+  static Future<void> updateStatus(int id, String status) async {
+    await http.post(
+      Uri.parse('$baseUrl/update_status.php'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        "id": id,
+        "status": status,
+        "key": "admin"
+      }),
+    );
+  }
+
+
+
 
 }
