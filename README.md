@@ -87,8 +87,8 @@ A mobile application built with **Flutter**, **PHP**, and **MySQL** that allows 
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/lost-and-found-flutter.git
-cd lost-and-found-flutter
+git clone https://github.com/OmarBader-dev/lost-and-found-app.git
+cd lost-and-found-app
 ```
 
 ### 2. Install dependencies
