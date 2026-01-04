@@ -36,19 +36,6 @@ A mobile application built with **Flutter**, **PHP**, and **MySQL** that allows 
 
 ---
 
-## 🗂️ Project Structure
-lib/
-├── models/
-│ └── item.dart
-├── screens/
-│ ├── items_screen.dart
-│ ├── add_item_screen.dart
-│ └── item_details_screen.dart
-├── services/
-│ └── api_service.dart
-└── main.dart
----
-
 ## 🧠 Application Logic
 
 - All items are created with status **Lost**
@@ -102,15 +89,17 @@ lib/
 ```bash
 git clone https://github.com/YOUR_USERNAME/lost-and-found-flutter.git
 cd lost-and-found-flutter
+```
 
 ### 2. Install dependencies
 ```bash
 flutter pub get
+```
 
 ### 3. Run the app
 ```bash
 flutter run
-
+```
 ---
 
 ## 🎓 Academic Purpose
