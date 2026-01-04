@@ -121,5 +121,6 @@ This project was developed as part of a university mobile application course to 
 
 ## 👤 Authors
 
-Omar Bader & Abdul Hussein Ibrahim
+**Omar Bader & Abdul Hussein Ibrahim**
+
 Lebanon 🇱🇧
